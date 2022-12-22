@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @keyframes shake {
+            to {
+                transform: rotate(8deg);
+            }
+        }
+
+        body {
+            background-color: whitesmoke;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 16px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 500;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 10px;
+        }        
+
+        #pez {
+            height: 150px;
+            width: 400px;
+            color: darkcyan;
+            font: bold 60px 'Courier New', Courier, monospace;
+            text-align: center;
+            animation: shake .2s infinite alternate;
+            transform: rotate(-8deg);
+            grid-column: span 2 / auto;
+        }
+
+        #contador {
+            grid-row: span 2 / auto;
+            font-size: 35px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid prueba">
+        <div id="pez"></div>
+        <div>⬆️ LANZAR CAÑA</div>
+        <div id="contador">Peces: 0</div>
+        <div>⬇️ RECOGER SEDAL</div>
+    </div>
+
+    <script>
+        const message = document.getElementById('pez');
+        const counter = document.getElementById('contador');
+        const pez = '&gt;&lt;((((\'&gt;';
+
+        let timer;
+        let contador = 0;
+
+        function pescar() {
+            const time = Math.random() * 2000 + 6000;
+            message.innerHTML = '🪝';
+            new Audio("lanzar.ogg").play();
+            timer = setTimeout(() => {
+                message.innerHTML = pez;
+                const pica = new Audio("pica.ogg");
+                pica.play()
+                setTimeout(() => {
+                    pica.pause();
+                    message.innerHTML = '';
+                }, 500);
+            }, time);
+        }
+
+        document.addEventListener("keydown", (event) => {
+            clearInterval(timer);
+            if (event.key === "ArrowUp") {
+                pescar();
+            }
+            if (event.key === "ArrowDown") {
+                if (message.innerHTML === pez) {
+                    contador++;
+                    counter.innerHTML = 'Peces: ' + contador;
+                    new Audio("coin.ogg").play();
+                }
+                message.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+
+</html>
